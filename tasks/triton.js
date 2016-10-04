@@ -16,35 +16,81 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('triton', 'Provision a Triton instance from  your Gruntfile.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+      client: {
+        profileName: 'env'
+      },
+
+      // passed directly to createMachine
+      machine: {
+        name: null,
+        tags: null
+      },
+      
+      // false: waits for instance to be in the 'running' state
+      // true: completes the task after creating the instance
+      // ignored when waitFor options are present
+      async: false,
+
+      // when truth and user provides no waitFor options, defaults are used.
+      waitForHTTP: false,
+
+      // waitFor option defaults
+      waitFor:{
+
+        // finish the task when HTTP is ready
+        http: {
+
+          // false: uses instance's public IP
+          // true: Use CNS instance FQDN
+          useCns: false,
+
+          // http or https
+          proto: 'http',
+
+          // if false, defaults to either 80 or 443 depending on proto
+          port: 80,
+
+          // Type of HTTP request to make
+          method: 'HEAD',
+
+          // expected response status
+          status: 200,
+
+          // check every interval seconds
+          interval: 1,
+          
+          // give up after this many intervals
+          timeout: 30,
+          
+          // show a . for each interval
+          twiddle: true,
+
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
 
-      // Handle options.
-      src += options.punctuation;
+      },
+     
+      // Use first package that meets this minimum criteria 
+      // only used if no package uuid set in machine{}
+      package: {
+        memory: null,
+        disk: null,
+        swap: null,
+        vcpus: null,
+        lwps: null
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+      },
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      // Use first image found that meets this criteria 
+      // only used if no image uuid set in machine{}
+      image: {
+        name: null,
+        os: null,
+        tags: null
+      }
+
     });
+    console.log(options);
   });
 
 };
