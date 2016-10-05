@@ -28,15 +28,8 @@ module.exports = function(grunt) {
       tests: ['tmp']
     },
 
-    // Configuration to be run (and then tested).
+    // Configuration examples:
     triton: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
       nginx: {
         options: {
           machine: {
@@ -67,6 +60,26 @@ module.exports = function(grunt) {
           },
           package: {
             memory: 512
+          }
+        }
+      },
+      nodejs : {
+        options: {
+          machine: {
+            name: 'nodejs-roulette'
+          },
+          image: function (images) {
+            var nodejs = [];
+            images.forEach(function (img) {
+              if (img.name.indexOf('node') != -1) {
+                nodejs.push(img);
+              }
+            });
+            // Grab a random nodejs image. Why not?
+            return nodejs[Math.floor(Math.random()*nodejs.length)].id;
+          },
+          package: {
+            memory: 128
           }
         }
       }

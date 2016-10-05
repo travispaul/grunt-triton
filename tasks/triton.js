@@ -171,15 +171,15 @@ module.exports = function(grunt) {
         }
       };
     findImage(function (img) {
-      if (img.length != 36) {
-        grunt.fatal(`${img} is not a valid image ID`);
+      if (!img || img.length != 36) {
+        grunt.fatal(`"${img}" is not a valid image ID`);
       } else {
         grunt.log.ok(`Using image: ${img}`);
       }
       options.machine.image = img;
       findPackage(function (pkg) {
-        if (pkg.length != 36) {
-          grunt.fatal(`${pkg} is not a valid package ID`);
+        if (!pkg || pkg.length != 36) {
+          grunt.fatal(`"${pkg}" is not a valid package ID`);
         } else {
           grunt.log.ok(`Using package ${pkg}`);
         }
