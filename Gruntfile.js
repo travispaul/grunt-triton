@@ -39,11 +39,15 @@ module.exports = function(grunt) {
       },
       custom_options: {
         options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
+          machine: {
+            name: 'test1'
+          },
+          image: {
+            name: 'nginx'
+          },
+          package: {
+            memory: 128
+          }
         }
       }
     },
