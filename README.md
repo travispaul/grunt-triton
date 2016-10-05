@@ -1,6 +1,11 @@
 # grunt-triton
 
-> Provision a Triton instance ffrom  your Gruntfile.
+> Provision a Triton instance from  your Gruntfile.
+
+See Also:
+* https://github.com/joyent/node-triton
+* https://apidocs.joyent.com/cloudapi
+* https://www.joyent.com/triton
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -37,17 +42,54 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### options.async
+Type: `Boolean`
+Default value: `false`
 
-A string value that is used to do something with whatever.
+When set to `false`, the task waits for the newly created instance to be in the 'running' state before running the next task.
+When set to `true`, the task is completed immediately after creating the machine.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.client
+Type: `Object`
+Default value: `{profileName: 'env'}`
 
-A string value that is used to do something else with whatever else.
+Passed directly to node-triton's [createClient](https://github.com/joyent/node-triton#tritonapi-module-usage) function.  Default uses the `TRITON_*` or `SDC_*` environment variables.
+
+#### options.image
+Type: `Object` or `Function`
+Default value: `{name: 'minimal-64-lts'}`
+
+If an `Object` is supplied with a `name` key, all images in Triton are searched for an image with the supplied name.
+
+If a `Function` is supplied, the task calls the function and passes in an `Array` of image `Objects` as the first argument.  The user can then perform their own filtering or searching on the images and return the desired image ID.
+
+If `machine.package` is set this option is ignored.
+
+See [listImages](https://apidocs.joyent.com/cloudapi/#ListImages) for more info.
+
+#### options.machine
+Type: `Object`
+Default value: `{}`
+
+Passed directly to [createMachine](https://apidocs.joyent.com/cloudapi/#CreateMachine).
+
+#### options.package
+Type: `Object` or `Function`
+Default value: `{memory: 128}`
+
+If an `Object` is supplied with a `memory` key, all packages in Triton are searched for a package with the requested amount of memory and the last package found is returned.
+
+If a `Function` is supplied, the task calls the function and passes in an `Array` of package `Objects` as the first argument.  The user can then perform their own filtering or searching on the packages and return the desired package ID.
+
+If `machine.package` is set this option is ignored.
+
+See [listPackages](https://apidocs.joyent.com/cloudapi/#ListPackages) for more info.
+
+#### options.test
+Type: `Boolean`
+Default value: `false`
+
+When set to `true` the machine is not created but info that would be passed to `createMachine` is shown on the console.
 
 ### Usage Examples
 
