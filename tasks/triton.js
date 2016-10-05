@@ -110,38 +110,56 @@ module.exports = function(grunt) {
               callback(error);
             }
           })
-          .on('response', function () {
-            callback();
-          });
+          .on('response', callback);
       },
       findImage = function (callback) {
         if (options.machine.image) {
           return callback(options.machine.image);
         }
+        if (!options.image) {
+          throw {message: 'No package search criteria'};
+        }
         api.triton.listImages(function (error, imgs) {
-          if (error) throw error; 
-          var result = [];
+          if (error) throw error;
+          if (typeof options.image === 'function') {
+            return callback(options.image(imgs));
+          }
+          var result;
           imgs.forEach(function (img) {
             if (img.name === options.image.name) {
-              result.push(img);
+              result = img.id;
             }
           });
-          callback(result.pop());
+          if (!result) {
+            throw {message:
+              `Unable to find image with name "${options.image.name}"`};
+          }
+          callback(result);
         });
       },
       findPackage = function (callback) {
         if (options.machine.package) {
           return callback(options.machine.package);
         }
+        if (!options.package) {
+          throw {message: 'No package search criteria'};
+        }
         api.cloud.listPackages(function (error, pkgs) {
-          if (error) throw error; 
-          var result = [];
+          if (error) throw error;
+          if (typeof options.package === 'function') {
+            return callback(options.package(pkgs));
+          }
+          var result;
           pkgs.forEach(function (pkg) {
-            if (pkg.memory <= options.package.memory) {
-              result.push(pkg);
+            if (pkg.memory === options.package.memory) {
+              result = pkg.id;
             }
           });
-          callback(result.pop());
+          if (!result) {
+            throw {message:
+              `Unable to find package with ${options.package.memory} of memory`};
+          }
+          callback(result);
         });
       },
       createMachine = {
@@ -171,20 +189,19 @@ module.exports = function(grunt) {
           });
         }
       };
-
     findImage(function (img) {
-      options.machine.image = img.id;
+      options.machine.image = img;
       findPackage(function (pkg) {
-        options.machine.package = pkg.id;
+        options.machine.package = pkg;
+        if (options.test) {
+          console.log(options.machine);
+          return done();
+        }
         createMachine[options.async ? 'async' : 'sync'](function (machine) {
           console.log(machine);
           done();
         });
       });
     });
-
-    console.log(options);
-
   });
-
 };
