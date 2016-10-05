@@ -93,34 +93,22 @@ When set to `true` the machine is not created but info that would be passed to `
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+#### Minimal Example
+
+ With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.
 
 ```js
 grunt.initConfig({
-  triton: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+  triton: {}
 });
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+#### Custom Examples
 
 ```js
 grunt.initConfig({
   triton: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+  }
 });
 ```
 
