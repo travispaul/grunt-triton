@@ -37,16 +37,36 @@ module.exports = function(grunt) {
           'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
         }
       },
-      custom_options: {
+      nginx: {
         options: {
           machine: {
-            name: 'test1'
+            name: 'nginx-128',
+            tags: {
+              role: 'www'
+            },
+            'metadata.user-script': grunt.file.read('nginx-user-script.sh'),
           },
           image: {
             name: 'nginx'
           },
           package: {
             memory: 128
+          }
+        }
+      },
+      couchdb: {
+        options: {
+          machine: {
+            name: 'couchdb-512',
+            tags: {
+              role: 'api'
+            },
+            'metadata.couchdb_password': 'get from .couchrc perhaps?',
+            'metadata.couchdb_bind_address': '0.0.0.0',
+            'metadata.user-script': grunt.file.read('couchdb-user-script.sh'),
+          },
+          package: {
+            memory: 512
           }
         }
       }
