@@ -1,3 +1,9 @@
+# Note
+
+Not published to npm yet, but working for the most part. Will publish to npm when I create the tests and get the waitForHTTP code moved from another project.
+
+Also, this is not an official Joyent project.  Use at your own risk, you **will** be billed for any resources you create.
+
 # grunt-triton
 
 > Provision a Triton instance from  your Gruntfile.
@@ -93,15 +99,8 @@ When set to `true` the machine is not created but info that would be passed to `
 
 ### Usage Examples
 
-#### Minimal Example
+With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.  See this repo's [Gruntfile.js](https://github.com/travispaul/grunt-triton/blob/master/Gruntfile.js#L32) for more detailed examples.
 
- With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.  See this repo's [Gruntfile.js](https://github.com/travispaul/grunt-triton/blob/master/Gruntfile.js#L32) for more detailed examples.
-
-```js
-grunt.initConfig({
-  triton: {}
-});
-```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
