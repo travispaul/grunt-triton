@@ -1,6 +1,6 @@
 # grunt-triton
 
-> Provision a Triton instance ffrom  your Gruntfile.
+> Provision a Triton instance from  your Gruntfile.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -37,17 +37,53 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### options.async
+Type: `Boolean`
 
-A string value that is used to do something with whatever.
+Default value: `false`
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+When set to `false`, wait for instance to be in the 'running' state.
+When set to `true` task is completed immediately after creating the machine.
 
-A string value that is used to do something else with whatever else.
+#### options.client
+Type: `Object`
+
+Default value: `{profileName: 'env'}`
+
+Passed directly to `triton.createClient`.  Default uses the `TRITON_*` or `SDC_*` environment variables.
+
+#### options.image
+Type: `Object` or `Function`
+
+Default value: `{name: 'minimal-64-lts'}`
+
+If an `Object` is supplied with a `name` key, all images in Triton are searched for an image with the supplied name.
+
+If a `Function` is supplied, an `Array` of package `Objects` is supplied as the first parameter and the user
+can do their own filtering or searching on the images.  The user-supplied `Function` must return a package ID.
+
+If machine.package is set this option is ignored.
+
+#### options.machine
+
+#### options.package
+Type: `Object` or `Function`
+
+Default value: `{memory: 128}`
+
+If an `Object` is supplied with a `memory` key, all packages in Triton are searched for an package with the supplied amount of memory.
+
+If a `Function` is supplied, an `Array` of package `Objects` is supplied as the first parameter and the user
+can do their own filtering or searching on the packages.  The user supplied `Function` must return a package ID.
+
+If machine.package is set this option is ignored.
+
+#### options.test
+Type: `Boolean`
+
+Default value: `false`
+
+When set to `true` machine is not created but info that would be passed to `createMachine` is shown on the console.
 
 ### Usage Examples
 
