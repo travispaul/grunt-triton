@@ -190,14 +190,26 @@ module.exports = function(grunt) {
         }
       };
     findImage(function (img) {
+      if (img.length != 36) {
+        grunt.fatal(`${img} is not a valid image ID`);
+      } else {
+        grunt.log.ok(`Using image: ${img}`);
+      }
       options.machine.image = img;
       findPackage(function (pkg) {
+        if (pkg.length != 36) {
+          grunt.fatal(`${pkg} is not a valid package ID`);
+        } else {
+          grunt.log.ok(`Using package ${pkg}`);
+        }
         options.machine.package = pkg;
         if (options.test) {
+          grunt.log.ok('Stopping due to test = true');
           console.log(options.machine);
           return done();
         }
         createMachine[options.async ? 'async' : 'sync'](function (machine) {
+          grunt.log.ok(`Instance created: ${machine.id}`);
           console.log(machine);
           done();
         });
