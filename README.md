@@ -95,20 +95,11 @@ When set to `true` the machine is not created but info that would be passed to `
 
 #### Minimal Example
 
- With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.
+ With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.  See this repo's [Gruntfile.js](Gruntfile.js) for more detailed examples.
 
 ```js
 grunt.initConfig({
   triton: {}
-});
-```
-
-#### Custom Examples
-
-```js
-grunt.initConfig({
-  triton: {
-  }
 });
 ```
 
