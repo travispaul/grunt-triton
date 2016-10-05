@@ -39,7 +39,6 @@ grunt.initConfig({
 
 #### options.async
 Type: `Boolean`
-
 Default value: `false`
 
 When set to `false`, wait for instance to be in the 'running' state.
