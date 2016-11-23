@@ -103,6 +103,8 @@ When set to `true` the plugin will make HEAD requests to the machine's IP addres
 Type: `Object`
 default values:
 
+The properties listed below are only used when `waitForHTTP` is `true`.
+
 ##### options.http.proto
 Type: `String`
 default: `http`
