@@ -93,6 +93,60 @@ Default value: `false`
 
 When set to `true` the machine is not created but info that would be passed to `createMachine` is shown on the console.
 
+#### options.waitForHTTP
+Type: `Boolean`
+Default value: `false`
+
+When set to `true` the plugin will make HEAD requests to the machine's IP address until it receives a successful response.
+
+#### options.http
+Type: `Object`
+default values:
+
+##### options.http.proto
+Type: `String`
+default: `http`
+
+Can be either http or https.
+
+##### options.http.port
+Type: `Integer`
+default: `80`
+
+Defaults to 80, must be set to 443 for https, can be set to any desired port number.
+
+
+##### options.http.method
+Type: `String`
+default: `HEAD`
+
+Can also be ``GET``.
+
+##### options.http.status
+Type: `Integer`
+default: `200`
+
+The expected response status code.
+
+##### options.http.interval
+Type: `Integer`
+default: `1000`
+
+Check for an HTTP response every `interval` milliseconds.
+
+##### options.http.attempts
+Type: `Integer`
+default: `30`
+
+Return unsuccessful after this many checks.
+
+##### options.http.twiddle
+Type: `Boolean`
+default: `true`
+
+When true a `.` is show for each HTTP request made.
+
+
 ### Usage Examples
 
 With no configuration grunt-triton will create a 128MB SmartOS instance and wait for it to start.  See this repo's [Gruntfile.js](https://github.com/travispaul/grunt-triton/blob/master/Gruntfile.js#L31) for more detailed examples.
