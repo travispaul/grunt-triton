@@ -99,9 +99,6 @@ With no configuration grunt-triton will create a 128MB SmartOS instance and wait
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
-## Release History
-_(Nothing yet)_
-
 
 ## Note
 
