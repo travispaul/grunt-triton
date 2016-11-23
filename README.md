@@ -117,7 +117,6 @@ default: `80`
 
 Defaults to 80, must be set to 443 for https, can be set to any desired port number.
 
-
 ##### options.http.method
 Type: `String`
 default: `HEAD`
@@ -140,7 +139,7 @@ Return unsuccessful after this many checks.
 Type: `Boolean`
 default: `true`
 
-When true a `.` is show for each HTTP request made.
+When true a `.` is shown for each HTTP request made.
 
 
 ### Usage Examples
