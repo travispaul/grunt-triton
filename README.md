@@ -124,12 +124,6 @@ default: `HEAD`
 
 Can also be ``GET``.
 
-##### options.http.status
-Type: `Integer`
-default: `200`
-
-The expected response status code.
-
 ##### options.http.interval
 Type: `Integer`
 default: `1000`

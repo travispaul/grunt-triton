@@ -25,42 +25,16 @@ module.exports = function(grunt) {
         },
         machine: {},
         async: false,
-
         waitForHTTP: false,
-
-        // waitFor option defaults
         waitFor: {
-
-          // finish the task when HTTP is ready
           http: {
-
-            // XXX: TODO
-            // false: uses instance's public IP
-            // true: Use CNS instance FQDN
-            //useCns: false,
-
-            // http or https
             proto: 'http',
-
-            // if false, defaults to either 80 or 443 depending on proto
             port: 80,
-
-            // Type of HTTP request to make
             method: 'HEAD',
-
-            // expected response status
-            status: 200,
-
-            // check every interval milliseconds
             interval: 1000,
-            
-            // give up after this many checks
             attempts: 30,
-            
-            // show a . for each interval
             twiddle: true
           }
-
         }
       }, this.options()),
       api = {
