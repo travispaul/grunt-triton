@@ -1,7 +1,7 @@
 {
   "name": "grunt-triton",
   "description": "Provision a Triton instance from  your Gruntfile.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/travispaul/grunt-triton",
   "author": {
     "name": "Travis Paul",
@@ -32,7 +32,7 @@
     "grunt": "~0.4.5"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin", "triton", "smartos", "joyent"
   ],
   "dependencies": {
     "bunyan": "^1.8.5",
