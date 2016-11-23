@@ -1,7 +1,7 @@
 {
   "name": "grunt-triton",
   "description": "Provision a Triton instance from  your Gruntfile.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/travispaul/grunt-triton",
   "author": {
     "name": "Travis Paul",
