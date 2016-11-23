@@ -15,8 +15,7 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
+        'tasks/*.js'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -30,14 +29,16 @@ module.exports = function(grunt) {
 
     // Configuration examples:
     triton: {
+
+      // create a 128MB nginx instance and serve HTML5 boilerplate
       nginx: {
         options: {
           machine: {
-            name: 'nginx-128',
+            name: 'grunt-nginx-128',
             tags: {
               role: 'www'
             },
-            'metadata.user-script': grunt.file.read('nginx-user-script.sh'),
+            'metadata.user-script': grunt.file.read('user-script/nginx-user-script.sh'),
           },
           image: {
             name: 'nginx'
@@ -47,47 +48,66 @@ module.exports = function(grunt) {
           }
         }
       },
+
+      // create a 512MB couchdb instance
       couchdb: {
         options: {
           machine: {
-            name: 'couchdb-512',
+            name: 'grunt-couchdb-512',
             tags: {
               role: 'api'
             },
             'metadata.couchdb_password': 'get from .couchrc perhaps?',
             'metadata.couchdb_bind_address': '0.0.0.0',
-            'metadata.user-script': grunt.file.read('couchdb-user-script.sh'),
+            'metadata.user-script': grunt.file.read('user-script/couchdb-user-script.sh'),
           },
           package: {
             memory: 512
           }
         }
       },
+
+      // create a nodejs instance using a random nodejs version
       nodejs : {
         options: {
           machine: {
-            name: 'nodejs-roulette'
+            name: 'grunt-nodejs-roulette'
           },
           image: function (images) {
             var nodejs = [];
             images.forEach(function (img) {
-              if (img.name.indexOf('node') != -1) {
+              if (img.name.indexOf('node') !== -1) {
                 nodejs.push(img);
               }
             });
-            // Grab a random nodejs image. Why not?
+            // Grab a random nodejs image.
             return nodejs[Math.floor(Math.random()*nodejs.length)].id;
           },
           package: {
             memory: 128
           }
         }
-      }
-    },
+      },
 
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js']
+      // create a 128MB nginx instance and wait for nginx to startup
+      nginxwait: {
+        options: {
+          waitForHTTP: true,
+          machine: {
+            name: 'grunt-nginxwait-128',
+            tags: {
+              role: 'www'
+            },
+            'metadata.user-script': grunt.file.read('user-script/nginxwait-user-script.sh'),
+          },
+          image: {
+            name: 'nginx'
+          },
+          package: {
+            memory: 128
+          }
+        }
+      }
     }
 
   });
@@ -98,11 +118,10 @@ module.exports = function(grunt) {
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'triton', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'triton:nginx', 'triton:couchdb', 'triton:nodejs', 'triton:nginxwait']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

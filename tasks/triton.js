@@ -2,7 +2,7 @@
 
 var merge = require('deepmerge');
 
-const CREATE_SYNC_INTERVAL = 3500;
+const CREATE_SYNC_INTERVAL = 5000;
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('triton', 'Provision a Triton instance from  your Gruntfile.', function() {
@@ -29,14 +29,15 @@ module.exports = function(grunt) {
         waitForHTTP: false,
 
         // waitFor option defaults
-        waitFor:{
+        waitFor: {
 
           // finish the task when HTTP is ready
           http: {
 
+            // XXX: TODO
             // false: uses instance's public IP
             // true: Use CNS instance FQDN
-            useCns: false,
+            //useCns: false,
 
             // http or https
             proto: 'http',
@@ -64,7 +65,7 @@ module.exports = function(grunt) {
       }, this.options()),
       api = {
         triton: triton.createClient(options.client),
-        // XXX pull these out of triton client config dont assume `env`.
+        // XXX pull these out of triton client config dont assume `env`?
         cloud: triton.createCloudApiClient({
           url: process.env.TRITON_URL || process.env.SDC_URL,
           account: process.env.TRITON_ACCOUNT || process.env.SDC_ACCOUNT,
@@ -80,7 +81,7 @@ module.exports = function(grunt) {
       retry = function (url, callback) {
         retryAttempts += 1;
         request
-          .get(url)
+          [options.waitFor.http.method.toLowerCase()](url)
           .on('error', function(error) {
             if (retryAttempts <= options.waitFor.http.attempts) {
               if (options.waitFor.http.twiddle) {
@@ -93,7 +94,9 @@ module.exports = function(grunt) {
               callback(error);
             }
           })
-          .on('response', callback);
+          .on('response', function () {
+            callback();
+          });
       },
       findImage = function (callback) {
         if (options.machine.image) {
@@ -146,7 +149,7 @@ module.exports = function(grunt) {
       createMachine = {
         sync: function (callback) {
           api.cloud.createMachine(options.machine, function (error, machine) {
-            if (error) throw error; 
+            if (error) throw error;
             machine.states = ['running'];
             grunt.log.ok(`Waiting for instance to start: ${machine.id}`);
             (function twiddle() {
@@ -158,8 +161,18 @@ module.exports = function(grunt) {
               }
             })();
             api.cloud.waitForMachineStates(machine, function (error, instance) {
-              if (error) throw error; 
-              callback(instance);
+              if (error) throw error;
+              if (options.waitForHTTP) {
+                var url = `${options.waitFor.http.proto}://${instance.primaryIp}:${options.waitFor.http.port}`;
+                grunt.log.writeln();
+                grunt.log.ok(`Waiting for HTTP ${options.waitFor.http.method} response from: ${url}`);
+                retry(url, function (error) {
+                  if (error) throw error;
+                  callback(instance);
+                });
+              } else {
+                callback(instance);
+              }
             });
           });
         },
@@ -171,14 +184,14 @@ module.exports = function(grunt) {
         }
       };
     findImage(function (img) {
-      if (!img || img.length != 36) {
+      if (!img || img.length !== 36) {
         grunt.fatal(`"${img}" is not a valid image ID`);
       } else {
         grunt.log.ok(`Using image: ${img}`);
       }
       options.machine.image = img;
       findPackage(function (pkg) {
-        if (!pkg || pkg.length != 36) {
+        if (!pkg || pkg.length !== 36) {
           grunt.fatal(`"${pkg}" is not a valid package ID`);
         } else {
           grunt.log.ok(`Using package ${pkg}`);

@@ -1,9 +1,3 @@
-# Note
-
-Not published to npm yet, but working for the most part. Will publish to npm when I create the tests and get the waitForHTTP code moved from another project.
-
-Also, this is not an official Joyent project.  Use at your own risk, you **will** be billed for any resources you create.
-
 # grunt-triton
 
 > Provision a Triton instance from  your Gruntfile.
@@ -107,3 +101,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 _(Nothing yet)_
+
+
+## Note
+
+This is **not** an official Joyent project.  Use at your own risk, you **will** be billed for any resources you create.
